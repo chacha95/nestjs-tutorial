@@ -11,7 +11,7 @@ content-type: application/json
 {
     "name": "coff",
     "brand": "SBUX",
-    "flavor": ["chco"]
+    "flavor": ["chco", "cc"]
 }
 
 ###
