@@ -10,11 +10,12 @@ content-type: application/json
 
 {
     "name": "coff",
-    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+    "brand": "SBUX",
+    "flavor": ["chco"]
 }
 
 ###
-PATCH http://127.0.0.1:3000/coffees/1 HTTP/1.1
+PATCH http://127.0.0.1:3000/coffees/3 HTTP/1.1
 content-type: application/json
 
 {
@@ -22,4 +23,4 @@ content-type: application/json
 }
 
 ###
-DELETE http://127.0.0.1:3000/coffees/1 HTTP/1.1
+DELETE http://127.0.0.1:3000/coffees/2 HTTP/1.1
