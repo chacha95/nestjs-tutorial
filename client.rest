@@ -1,0 +1,25 @@
+###
+GET http://127.0.0.1:3000 HTTP/1.1
+
+###
+GET http://127.0.0.1:3000/coffees HTTP/1.1
+
+###
+POST http://127.0.0.1:3000/coffees HTTP/1.1
+content-type: application/json
+
+{
+    "name": "coff",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+###
+PATCH http://127.0.0.1:3000/coffees/1 HTTP/1.1
+content-type: application/json
+
+{
+    "name": "coff"
+}
+
+###
+DELETE http://127.0.0.1:3000/coffees/1 HTTP/1.1
