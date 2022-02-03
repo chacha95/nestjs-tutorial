@@ -1,4 +1,7 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Connection, Repository} from 'typeorm';
 import {CreateCoffeeDto} from './dto/create-coffee.dto';
@@ -6,6 +9,7 @@ import {UpdateCoffeeDto} from './dto/update-coffee.dto';
 import {Coffee} from './entities/coffee.entity';
 import {Flavor} from './entities/flavor.entity';
 import {Event} from '../events/entities/event.entity';
+import {ConfigService} from '@nestjs/config';
 
 @Injectable()
 export class CoffeesService {
@@ -16,7 +20,13 @@ export class CoffeesService {
     private readonly flavorRepository: Repository<Flavor>,
     // 트랜잭션
     private readonly connection: Connection,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    const databaseHost = this.configService.get(
+      'database.host',
+      'localhost',
+    );
+  }
 
   findAll() {
     return this.coffeeRepository.find({
@@ -25,18 +35,23 @@ export class CoffeesService {
   }
 
   async findOne(id: string) {
-    const coffee = await this.coffeeRepository.findOne(id, {
-      relations: ['flavors'],
-    });
+    const coffee =
+      await this.coffeeRepository.findOne(id, {
+        relations: ['flavors'],
+      });
     if (!coffee) {
-      throw new NotFoundException(`Coffee ${id} not found`);
+      throw new NotFoundException(
+        `Coffee ${id} not found`,
+      );
     }
     return coffee;
   }
 
   async create(createCoffeeDto: CreateCoffeeDto) {
     const flavors = await Promise.all(
-      createCoffeeDto.flavor.map(name => this.preloadFlavorByName(name)),
+      createCoffeeDto.flavor.map(name =>
+        this.preloadFlavorByName(name),
+      ),
     );
     const coffee = this.coffeeRepository.create({
       ...createCoffeeDto,
@@ -45,14 +60,20 @@ export class CoffeesService {
     return this.coffeeRepository.save(coffee);
   }
 
-  async update(id: string, updateCoffeeDto: UpdateCoffeeDto) {
+  async update(
+    id: string,
+    updateCoffeeDto: UpdateCoffeeDto,
+  ) {
     // update의 경우 preload 사용
-    const coffee = await this.coffeeRepository.preload({
-      id: +id,
-      ...updateCoffeeDto,
-    });
+    const coffee =
+      await this.coffeeRepository.preload({
+        id: +id,
+        ...updateCoffeeDto,
+      });
     if (!coffee) {
-      throw new NotFoundException(`Coffee ${id} not found`);
+      throw new NotFoundException(
+        `Coffee ${id} not found`,
+      );
     }
     return this.coffeeRepository.save(coffee);
   }
@@ -63,8 +84,11 @@ export class CoffeesService {
   }
 
   // for cascading insert
-  private async preloadFlavorByName(name: string): Promise<Flavor> {
-    const existingFlavor = await this.flavorRepository.findOne({name});
+  private async preloadFlavorByName(
+    name: string,
+  ): Promise<Flavor> {
+    const existingFlavor =
+      await this.flavorRepository.findOne({name});
     if (existingFlavor) {
       return existingFlavor;
     }
@@ -73,7 +97,8 @@ export class CoffeesService {
 
   // 트랜잭션 코드
   async recommendCoffee(coffee: Coffee) {
-    const queryRunner = this.connection.createQueryRunner();
+    const queryRunner =
+      this.connection.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -83,10 +108,14 @@ export class CoffeesService {
       const recommendEvent = new Event();
       recommendEvent.name = 'recommend_coffee';
       recommendEvent.type = 'coffee';
-      recommendEvent.payload = {coffeeId: coffee.id};
+      recommendEvent.payload = {
+        coffeeId: coffee.id,
+      };
 
       await queryRunner.manager.save(coffee);
-      await queryRunner.manager.save(recommendEvent);
+      await queryRunner.manager.save(
+        recommendEvent,
+      );
 
       await queryRunner.commitTransaction();
     } catch (err) {

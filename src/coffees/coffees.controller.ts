@@ -15,7 +15,9 @@ import {CoffeesService} from './coffees.service';
 
 @Controller('coffees')
 export class CoffeesController {
-  constructor(private readonly coffeesService: CoffeesService) {}
+  constructor(
+    private readonly coffeesService: CoffeesService,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)

@@ -7,7 +7,9 @@ import {Flavor} from './entities/flavor.entity';
 
 @Module({
   // .forFeatrure는 어떤 Repository가 연동되 있는지 나타냄
-  imports: [TypeOrmModule.forFeature([Coffee, Flavor])],
+  imports: [
+    TypeOrmModule.forFeature([Coffee, Flavor]),
+  ],
   controllers: [CoffeesController],
   providers: [CoffeesService],
 })
