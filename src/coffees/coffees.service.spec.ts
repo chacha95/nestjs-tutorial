@@ -6,20 +6,22 @@ import {Flavor} from './entities/flavor.entity';
 import {Coffee} from './entities/coffee.entity';
 import {NotFoundException} from '@nestjs/common';
 
-// Mock
+// mocking
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 const createMockRepository = <T = any>(): MockRepository<T> => ({
   findOne: jest.fn(),
   create: jest.fn(),
 });
+// for time out
+jest.setTimeout(10000);
 
 describe('CoffeesService', () => {
   let service: CoffeesService;
   let coffeeRepository: MockRepository;
 
-  // test 시작 전 DI
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      // DI
       providers: [
         CoffeesService,
         {provide: Connection, useValue: {}},
@@ -38,11 +40,11 @@ describe('CoffeesService', () => {
     coffeeRepository = module.get<MockRepository>(getRepositoryToken(Coffee));
   });
 
+  // indivisual test 약자
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  // unit test
   describe('findOne', () => {
     describe('when coffee with ID exists', () => {
       it('should return the coffee object', async () => {
@@ -55,13 +57,12 @@ describe('CoffeesService', () => {
       });
     });
     describe('otherwise', () => {
-      it('should throw the "NotFoundException"', async done => {
-        const coffeeId = '2';
-        coffeeRepository.findOne.mockReturnValue(undefined);
+      it('should throw the "NotFoundException"', async () => {
+        const coffeeId = '1';
+        coffeeRepository.findOne.mockReturnValue('2');
 
         try {
           await service.findOne(coffeeId);
-          done();
         } catch (err) {
           expect(err).toBeInstanceOf(NotFoundException);
           expect(err.message).toEqual(`Coffee ${coffeeId} not found`);
