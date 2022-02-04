@@ -1,10 +1,10 @@
 import {ValidationPipe} from '@nestjs/common';
 import {NestFactory} from '@nestjs/core';
+import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {AppModule} from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
   //global validation
   app.useGlobalPipes(
     new ValidationPipe({
@@ -16,5 +16,17 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Swagger set
+  const options = new DocumentBuilder()
+    .setTitle('Iluvcoffee')
+    .setDescription('Coffee application')
+    .setVersion('1.0')
+    .build();
+
+  const doc = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, doc);
+
+  await app.listen(3000);
 }
 bootstrap();

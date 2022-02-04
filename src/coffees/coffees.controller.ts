@@ -11,16 +11,17 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import {ApiResponse, ApiTags} from '@nestjs/swagger';
 import {CoffeesService} from './coffees.service';
 
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
-  constructor(
-    private readonly coffeesService: CoffeesService,
-  ) {}
+  constructor(private readonly coffeesService: CoffeesService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({status: 403, description: 'Forbidden'})
   findAll(@Query() paginationQuery) {
     // 화면에 몇개나 보여주는가 pagination을 query로 처리 가능
     const {limit, offset} = paginationQuery;

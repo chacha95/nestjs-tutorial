@@ -23,12 +23,8 @@ export class Coffee {
   recommendations: number;
 
   @JoinTable()
-  @ManyToMany(
-    type => Flavor,
-    flavor => flavor.coffees,
-    {
-      cascade: true, // ['insert']
-    },
-  )
+  @ManyToMany(type => Flavor, flavor => flavor.coffees, {
+    cascade: true, // ['insert']
+  })
   flavors: Flavor[];
 }
