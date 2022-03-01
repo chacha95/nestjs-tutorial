@@ -1,9 +1,40 @@
-version: "3"
+version: '3.8'
+
 services:
-  db:
-    image:  postgres
-    restart: always 
-    ports:
-      - "5432:5432"
+  # app:
+  #   container_name: local-app
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - 3000:3000
+  #   command: yarn run start:dev
+  #   links:
+  #     - redis
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - local-network
+  #   depends_on: [ 'redis', 'kibana' ]
+
+  postgres:
+    image: postgres
+    restart: always
+    container_name: local-postgres
     environment:
-       POSTGRES_PASSWORD: pass123
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+    volumes:
+      - ./pgdata:/var/lib/postgresql
+    ports:
+      - $POSTGRES_PORT:5432
+    env_file:
+      - .env
+    networks:
+      - local-network
+
+networks:
+  local-network:

@@ -1,10 +1,21 @@
-import {ValidationPipe} from '@nestjs/common';
-import {NestFactory} from '@nestjs/core';
-import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
-import {AppModule} from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import helmet from 'helmet';
+
+import { AppModule } from './app.module';
+import { setupSwagger } from './shared/utils/swagger';
+import { ApiConfigService } from './shared/services/api-config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const apiConfig: ApiConfigService =
+    app.get<ApiConfigService>(ApiConfigService);
+
+  // CORS 설정
+  app.enableCors();
+  // Express app에서 header 관련 secure package
+  app.use(helmet());
+  app.setGlobalPrefix('api/');
   //global validation
   app.useGlobalPipes(
     new ValidationPipe({
@@ -17,16 +28,12 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger set
-  const options = new DocumentBuilder()
-    .setTitle('Iluvcoffee')
-    .setDescription('Coffee application')
-    .setVersion('1.0')
-    .build();
+  // OpenAPI 설정
+  setupSwagger(app, apiConfig);
 
-  const doc = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, doc);
-
-  await app.listen(3000);
+  await app.listen(apiConfig.appConfig.port, () =>
+    console.log(`listening to ${apiConfig.appConfig.port}.`),
+  );
 }
+
 bootstrap();
