@@ -1,9 +1,27 @@
 import { ConfigService } from '@nestjs/config';
 import { isNil } from 'lodash';
 
-export class TypeCheck {
+export class ConfigCheck {
   constructor(protected configService: ConfigService) {}
 
+  // env check
+  get appEnv(): string {
+    return this.getString('APP_ENV');
+  }
+
+  get isDevelopment(): boolean {
+    return this.appEnv === 'dev';
+  }
+
+  get isProduction(): boolean {
+    return this.appEnv === 'prod';
+  }
+
+  get isTest(): boolean {
+    return this.appEnv === 'test';
+  }
+
+  // type check
   protected getNumber(key: string): number {
     const value = this.get(key);
 

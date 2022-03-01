@@ -4,12 +4,12 @@ import helmet from 'helmet';
 
 import { AppModule } from './app.module';
 import { setupSwagger } from './shared/utils/swagger';
-import { ApiConfigService } from './shared/services/api-config.service';
+import { AppConfigService } from './shared/services/app-config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const apiConfig: ApiConfigService =
-    app.get<ApiConfigService>(ApiConfigService);
+  const appConfig: AppConfigService =
+    app.get<AppConfigService>(AppConfigService);
 
   // CORS 설정
   app.enableCors();
@@ -29,10 +29,10 @@ async function bootstrap() {
   );
 
   // OpenAPI 설정
-  setupSwagger(app, apiConfig);
+  setupSwagger(app, appConfig);
 
-  await app.listen(apiConfig.appConfig.port, () =>
-    console.log(`listening to ${apiConfig.appConfig.port}.`),
+  await app.listen(appConfig.appConfig.port, () =>
+    console.log(`listening to ${appConfig.appConfig.port}.`),
   );
 }
 

@@ -4,14 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CoffeesModule } from './coffees/coffees.module';
 import { HealthCheckModule } from './health/health-check.module';
 import { SharedModule } from './shared/shared.module';
-import { ApiConfigService } from './shared/services/api-config.service';
+import { UsersModule } from './users/users.module';
+import { DBConfigService } from './shared/services/db-config.service';
 
 @Module({
   imports: [
-    CoffeesModule,
     HealthCheckModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -19,10 +18,11 @@ import { ApiConfigService } from './shared/services/api-config.service';
     }),
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
-      useFactory: async (configService: ApiConfigService) =>
-        configService.postgresConfig,
-      inject: [ApiConfigService],
+      useFactory: async (dbConfigService: DBConfigService) =>
+        dbConfigService.postgresConfig,
+      inject: [DBConfigService],
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

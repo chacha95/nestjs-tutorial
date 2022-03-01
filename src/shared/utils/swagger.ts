@@ -1,10 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ApiConfigService } from '../services/api-config.service';
+import { AppConfigService } from '../services/app-config.service';
 
 export function setupSwagger(
   app: INestApplication,
-  apiConfigService: ApiConfigService,
+  apiConfigService: AppConfigService,
 ): void {
   const options = new DocumentBuilder()
     .setTitle(apiConfigService.appConfig.name)
