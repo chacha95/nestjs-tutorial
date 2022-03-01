@@ -12,6 +12,6 @@ export class UserEntity {
   firstName: string;
 
   @Column()
-  @ApiProperty({ description: '이름' })
+  @ApiProperty({ description: '성' })
   lastName: string;
 }
