@@ -1,36 +1,42 @@
-import { faker } from '@faker-js/faker';
+import { Module } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UserRepository } from './repositories/user.repository';
+import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
+import { Connection, Repository } from 'typeorm';
+import { UserEntity } from './entities/user.entity';
+
 import { UsersService } from './users.service';
 
-// mocking db
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 const createMockRepository = <T = any>(): MockRepository<T> => ({
   findOne: jest.fn(),
   create: jest.fn(),
 });
-// for time out
-jest.setTimeout(10000);
 
 describe('UsersService', () => {
-  let service: UsersService;
-  let userRepository: UserRepository;
+  let usersService: UsersService;
+  let userRepository: MockRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, UserRepository],
+      providers: [
+        UsersService,
+        { provide: Connection, useValue: {} },
+        {
+          provide: getRepositoryToken(UserEntity),
+          useValue: createMockRepository(),
+        },
+      ],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
-    userRepository = module.get<UserRepository>(UserRepository);
+    usersService = module.get<UsersService>(UsersService);
+    userRepository = module.get<MockRepository>(getRepositoryToken(UserEntity));
   });
 
-  describe('createUser', () => {
-    it('should create a user', async () => {
-      // const firstName = faker.name.firstName();
-      // const lastName = faker.name.lastName();
-    });
+  it('should be defined', () => {
+    expect(usersService).toBeDefined();
   });
+
+  // describe('createUser', () => {
+  //   describe('success case', () => {
+  // });
 });

@@ -14,4 +14,11 @@ export class UserEntity {
   @Column()
   @ApiProperty({ description: '성' })
   lastName: string;
+
+  static of(params: Partial<UserEntity>): UserEntity {
+    const user = new UserEntity();
+    Object.assign(user, params);
+
+    return user;
+  }
 }

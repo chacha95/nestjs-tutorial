@@ -536,6 +536,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@golevelup/ts-jest@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@golevelup/ts-jest@npm:0.3.2"
+  checksum: c36dbbf82cba929551d23bc23ca161ce7e742e204476c65ccb713c2d948217459833d1f42522ed46604e5fafd984d3b433a36a8902218d32fd20d69dc51776a6
+  languageName: node
+  linkType: hard
+
 "@hapi/hoek@npm:^9.0.0":
   version: 9.2.1
   resolution: "@hapi/hoek@npm:9.2.1"
@@ -5671,6 +5678,7 @@ __metadata:
   resolution: "nestjs-tutorial@workspace:."
   dependencies:
     "@faker-js/faker": ^6.0.0-alpha.7
+    "@golevelup/ts-jest": ^0.3.2
     "@nestjs/cli": ^8.0.0
     "@nestjs/common": ^8.0.0
     "@nestjs/config": ^1.2.0

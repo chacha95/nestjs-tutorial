@@ -50,12 +50,12 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.updateUser(+id, updateUserDto);
+    return this.usersService.updateByUserId(+id, updateUserDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.ACCEPTED)
   async deleteUser(@Param('id') id: string) {
-    return this.usersService.deleteUser(+id);
+    return this.usersService.deleteByUserId(+id);
   }
 }
