@@ -1,17 +1,17 @@
-import { NotFoundException } from '@nestjs/common';
-import { Injectable } from '@nestjs/common';
-import { getManager } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { getManager, Repository } from 'typeorm';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from './entities/user.entity';
-import { UserRepository } from './repositories/user.repository';
+import { UserEntity } from './user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     // private connection: Connection,
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   // queryRunner 방식
@@ -73,6 +73,14 @@ export class UsersService {
       throw new NotFoundException(`user id: ${userId} not found`);
     }
     return this.userRepository.save(user);
+  }
+
+  async deleteByUserId(userId: number): Promise<UserEntity> {
+    const user = await this.userRepository.preload({ id: +userId });
+    if (!user) {
+      throw new NotFoundException(`user id: ${userId} not found`);
+    }
+    return this.userRepository.remove(user);
   }
 
   // async deleteByUserId(userId: number) {

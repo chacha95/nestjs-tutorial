@@ -4,9 +4,9 @@ import { IsString } from 'class-validator';
 export class CreateUserDto {
   @IsString()
   @ApiProperty({ description: '이름' })
-  readonly firstName: string;
+  readonly first_name: string;
 
   @IsString()
   @ApiProperty({ description: '성' })
-  readonly lastName: string;
+  readonly last_name: string;
 }
