@@ -1,7 +1,6 @@
 import { ConfigService } from '@nestjs/config';
-import { isNil } from 'lodash';
 
-export class ConfigCheck {
+export class BaseConfigService {
   constructor(protected configService: ConfigService) {}
 
   // env check
@@ -51,7 +50,8 @@ export class ConfigCheck {
   protected get(key: string): string {
     const value = this.configService.get<string>(key);
 
-    if (isNil(value)) {
+    // https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_isnil
+    if (value == null) {
       throw new Error(key + ' environment variable does not set'); // probably we should call process.exit() too to avoid locking the service
     }
 

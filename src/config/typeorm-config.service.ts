@@ -1,24 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigCheck } from '../utils/config-check';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+
+import { BaseConfigService } from './base-config.service';
 
 @Injectable()
-export class DBConfigService extends ConfigCheck {
+export class TypeORMConfigService extends BaseConfigService {
   constructor(protected configService: ConfigService) {
     super(configService);
   }
 
-  get postgresConfig(): TypeOrmModuleOptions {
-    const entities = [
-      __dirname + '/../../modules/**/*.entity{.ts,.js}',
-      __dirname + '/../../modules/**/*.view-entity{.ts,.js}',
-    ];
-    const migrations = [__dirname + '/../../database/migrations/*{.ts,.js}'];
-
+  get config(): TypeOrmModuleOptions {
     return {
-      entities,
-      migrations,
       keepConnectionAlive: !this.isTest,
       dropSchema: this.isTest,
       type: 'postgres',

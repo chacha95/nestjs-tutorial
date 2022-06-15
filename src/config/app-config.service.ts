@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ConfigCheck } from '../utils/config-check';
+
+import { BaseConfigService } from './base-config.service';
 
 @Injectable()
-export class AppConfigService extends ConfigCheck {
+export class AppConfigService extends BaseConfigService {
   constructor(protected configService: ConfigService) {
     super(configService);
   }
 
-  get documentationEnabled(): boolean {
+  get docEnabled(): boolean {
     return this.getBoolean('ENABLE_DOCUMENTATION');
   }
 
@@ -28,7 +29,7 @@ export class AppConfigService extends ConfigCheck {
     return this.appEnv === 'test';
   }
 
-  get appConfig() {
+  get config() {
     return {
       name: this.getString('APP_NAME'),
       port: this.getString('APP_PORT'),
