@@ -1,24 +1,34 @@
 # Nestjs-Tutorial
 
-## Installation
+## Local Environment
+
+### Installation dependecies
 
 ```bash
 $ yarn
 ```
 
-## Local Environment
+### Development Tools
 
 db migration
 
 ```bash
-# create
-$ npm run makemigration "message"
+# reset schema
+$ yarn db:reset
 
-# apply
-$ npm run migrate
+# create migration
+$ yarn db:makeMigration "MIGRATION MESSAGE"
+
+# apply migration
+$ yarn db:migrate
 ```
 
-## Running the app
+### setup infra
+```bash
+$ docker-compose up -d
+```
+
+### Running the app
 
 ```bash
 # development
@@ -31,7 +41,7 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-## Test
+### Test
 
 ```bash
 # unit tests

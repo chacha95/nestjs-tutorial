@@ -11,4 +11,4 @@ const providers = [AppConfigService, DBConfigService];
   imports: [],
   exports: [...providers],
 })
-export class SharedModule {}
+export class CommonModule {}

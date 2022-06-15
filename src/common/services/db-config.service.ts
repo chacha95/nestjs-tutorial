@@ -1,7 +1,7 @@
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigCheck } from '../utils/config-check';
-import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class DBConfigService extends ConfigCheck {
