@@ -8,22 +8,15 @@
 $ yarn
 ```
 
-### Development Tools
-
-db migration
+### setup env and db
 
 ```bash
-# reset schema
-$ yarn db:reset
-
-# create migration
-$ yarn db:makeMigration "MIGRATION MESSAGE"
-
-# apply migration
-$ yarn db:migrate
+# set env
+$ export $(cat .env | xargs) 2>/dev/null
 ```
 
 ### setup infra
+
 ```bash
 $ docker-compose up -d
 ```
@@ -52,4 +45,19 @@ $ yarn run test:e2e
 
 # test coverage
 $ yarn run test:cov
+```
+
+### Development Tools
+
+db migration
+
+```bash
+# reset schema
+$ yarn db:reset
+
+# create migration
+$ yarn db:makeMigration "MIGRATION MESSAGE"
+
+# apply migration
+$ yarn db:migrate
 ```

@@ -1,39 +1,31 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import helmet from 'helmet';
 
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { AppConfigService } from './common/services/app-config.service';
-import { setupSwagger } from './common/utils/swagger';
+import { AppConfigService } from './config/app-config.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const appConfig: AppConfigService =
     app.get<AppConfigService>(AppConfigService);
 
-  // CORS 설정
   app.enableCors();
-  // Express app에서 header 관련 secure package
-  app.use(helmet());
   app.setGlobalPrefix('api/');
-  //global validation
-  app.useGlobalPipes(
-    new ValidationPipe({
-      // DTO에 정의 되지 않은 값이 들어오면 request 자체를 막음
-      // @IsString()과 같이 decorator를 무조건 달아야함
-      forbidNonWhitelisted: true,
-      // @없는 속성 들어오면 해당 속성 제거
-      whitelist: true,
-      // type 자동 변환
-      transform: true,
-    }),
-  );
 
-  // OpenAPI 설정
-  setupSwagger(app, appConfig);
+  // OpenAPI docs
+  if (appConfig.docEnabled) {
+    const options = new DocumentBuilder()
+      .setTitle(appConfig.config.name)
+      .setVersion(appConfig.config.version)
+      // .addBearerAuth()
+      .build();
 
-  await app.listen(appConfig.appConfig.port, () =>
-    console.log(`listening to ${appConfig.appConfig.port}.`),
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('/docs', app, document);
+  }
+
+  await app.listen(appConfig.config.port, () =>
+    console.log(`listening to ${appConfig.config.port}.`),
   );
 }
 

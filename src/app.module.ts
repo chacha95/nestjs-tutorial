@@ -1,32 +1,40 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule as NestConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { PrismaModule } from 'nestjs-prisma';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CommonModule } from './common/common.module';
-import { DBConfigService } from './common/services/db-config.service';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { customValidationPipe } from './common/pipes/validation.pipe';
 import { HealthCheckModule } from './health/health-check.module';
-import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     HealthCheckModule,
-    ConfigModule.forRoot({
+    NestConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: process.env.DOTENV_CONFIG_PATH
+        ? process.env.DOTENV_CONFIG_PATH
+        : '.env',
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [CommonModule],
-      useFactory: async (dbConfigService: DBConfigService) =>
-        dbConfigService.postgresConfig,
-      inject: [DBConfigService],
+    PrismaModule.forRoot({
+      isGlobal: true,
     }),
-    UsersModule,
-    PostsModule,
+    UsersModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useValue: customValidationPipe
+    },
+    {
+      provide: APP_FILTER,
+      useValue: HttpExceptionFilter,
+    }
+  ],
 })
 export class AppModule {}
