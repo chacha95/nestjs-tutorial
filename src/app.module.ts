@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { customValidationPipe } from './common/pipes/validation.pipe';
+import { ConfigModule } from './config/config.module';
 import { HealthCheckModule } from './health/health-check.module';
 import { UsersModule } from './users/users.module';
 
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
     PrismaModule.forRoot({
       isGlobal: true,
     }),
+    ConfigModule,
     UsersModule
   ],
   controllers: [AppController],
