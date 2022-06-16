@@ -15,12 +15,13 @@ model User {
   id    String  @id
   email String  @unique
   name  String?
+  Post  Post[]
 }
 
-// model Post {
-//   id      Int     @id @default(autoincrement())
-//   title   String
-//   content String?
-//   userId  Int?
-//   user    User?   @relation(fields: [userId], references: [id])
-// }
+model Post {
+  userId  String
+  id      String  @id
+  title   String  @unique
+  content String?
+  user    User    @relation(fields: [userId], references: [id])
+}

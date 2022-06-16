@@ -21,6 +21,15 @@ $ export $(cat .env | xargs) 2>/dev/null
 $ docker-compose up -d
 ```
 
+### db migration
+
+```bash
+# create migration file
+yarn prisma migrate dev --schema ./prisma/schema.prisma
+# migration
+$ yarn prisma migrate dev --schema ./prisma/schema.prisma
+```
+
 ### Running the app
 
 ```bash
@@ -45,19 +54,4 @@ $ yarn run test:e2e
 
 # test coverage
 $ yarn run test:cov
-```
-
-### Development Tools
-
-db migration
-
-```bash
-# reset schema
-$ yarn db:reset
-
-# create migration
-$ yarn db:makeMigration "MIGRATION MESSAGE"
-
-# apply migration
-$ yarn db:migrate
 ```

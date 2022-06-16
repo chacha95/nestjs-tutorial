@@ -6,4 +6,15 @@ Table User {
   id String [pk]
   email String [unique, not null]
   name String
+  Post Post [not null]
 }
+
+Table Post {
+  userId String [not null]
+  id String [pk]
+  title String [unique, not null]
+  content String
+  user User [not null]
+}
+
+Ref: Post.userId > User.id

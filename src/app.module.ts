@@ -10,6 +10,7 @@ import { customValidationPipe } from './common/pipes/validation.pipe';
 import { ConfigModule } from './config/config.module';
 import { HealthCheckModule } from './health/health-check.module';
 import { UsersModule } from './users/users.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsersModule } from './users/users.module';
     }),
     ConfigModule,
     UsersModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [
