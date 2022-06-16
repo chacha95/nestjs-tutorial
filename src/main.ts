@@ -1,6 +1,7 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { AppModule } from './app.module';
 import { AppConfigService } from './config/app-config.service';
 
@@ -23,6 +24,10 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('/docs', app, document);
   }
+
+  // Prisma Client Exception Filter
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 
   await app.listen(appConfig.config.port, () =>
     console.log(`listening to ${appConfig.config.port}.`),

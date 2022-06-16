@@ -24,19 +24,19 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
     }),
     ConfigModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     {
       provide: APP_PIPE,
-      useValue: customValidationPipe
+      useValue: customValidationPipe,
     },
     {
       provide: APP_FILTER,
       useValue: HttpExceptionFilter,
-    }
+    },
   ],
 })
 export class AppModule {}

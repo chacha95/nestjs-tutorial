@@ -1,27 +1,26 @@
-datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-}
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 generator dbml {
-    provider = "prisma-dbml-generator"
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id    Int     @id @default(autoincrement())
-    email String  @unique
-    name  String?
-    posts Post[]
+  id    String  @id
+  email String  @unique
+  name  String?
 }
 
-model Post {
-    id       Int     @id @default(autoincrement())
-    title    String
-    content  String?
-    author   User?   @relation(fields: [authorId], references: [id])
-    authorId Int?
-}
+// model Post {
+//   id      Int     @id @default(autoincrement())
+//   title   String
+//   content String?
+//   userId  Int?
+//   user    User?   @relation(fields: [userId], references: [id])
+// }

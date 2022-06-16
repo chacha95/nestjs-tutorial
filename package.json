@@ -52,8 +52,10 @@
     "prisma-dbml-generator": "^0.9.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.4",
+    "studio": "^0.13.5",
     "swagger-ui-express": "^4.3.0",
-    "typeorm": "^0.2.44"
+    "typeorm": "^0.2.44",
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.7",
