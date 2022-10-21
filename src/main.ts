@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module';
 import { AppConfigService } from './config/app-config.service';
 
@@ -17,7 +18,6 @@ async function bootstrap() {
     const options = new DocumentBuilder()
       .setTitle(appConfig.config.name)
       .setVersion(appConfig.config.version)
-      // .addBearerAuth()
       .build();
 
     const document = SwaggerModule.createDocument(app, options);

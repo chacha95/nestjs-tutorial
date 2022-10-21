@@ -34,6 +34,7 @@
     "@nestjs/config": "^1.2.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/cqrs": "^8.0.2",
+    "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^8.3.1",
     "@nestjs/swagger": "^5.2.0",
@@ -44,6 +45,7 @@
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "joi": "^17.6.0",
+    "nest-winston": "^1.7.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -51,7 +53,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.4",
     "swagger-ui-express": "^4.3.0",
-    "typeorm": "^0.2.44"
+    "typeorm": "^0.2.44",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.7",

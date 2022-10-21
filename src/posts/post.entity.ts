@@ -12,7 +12,7 @@ export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'number', nullable: false })
   user_id: number;
 
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
