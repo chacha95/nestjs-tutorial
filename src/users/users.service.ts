@@ -9,33 +9,10 @@ import { UserEntity } from './user.entity';
 @Injectable()
 export class UsersService {
   constructor(
-    // private connection: Connection,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  // queryRunner 방식
-  // async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-  //   const queryRunner = this.connection.createQueryRunner();
-
-  //   const userEntity = this.userRepository.create(createUserDto);
-
-  //   await queryRunner.connect();
-  //   await queryRunner.startTransaction();
-  //   try {
-  //     const result = await queryRunner.manager.save(userEntity);
-
-  //     await queryRunner.commitTransaction();
-  //     return result;
-  //   } catch (err) {
-  //     await queryRunner.rollbackTransaction();
-  //     throw new NotFoundException(`Failed: ${err}`);
-  //   } finally {
-  //     await queryRunner.release();
-  //   }
-  // }
-
-  // 객체 생성(Entity Manager) 방식
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const user = this.userRepository.create(createUserDto);
     await getManager()
@@ -49,57 +26,37 @@ export class UsersService {
     return user;
   }
 
-  async getUsers() {
-    return this.userRepository.find();
-  }
-
-  async getUserById(userId: number): Promise<UserEntity> {
-    const user = await this.userRepository.findOne(userId);
-    if (!user) {
-      throw new NotFoundException(`user id: ${userId} not found`);
-    }
-    return user;
-  }
-
-  async updateByUserId(
-    userId: number,
+  async updateUser(
+    id: number,
     updateUserDto: UpdateUserDto,
   ): Promise<UserEntity> {
     const user = await this.userRepository.preload({
-      id: +userId,
+      id: +id,
       ...updateUserDto,
     });
     if (!user) {
-      throw new NotFoundException(`user id: ${userId} not found`);
+      throw new NotFoundException(`user id: ${id} not found`);
     }
     return this.userRepository.save(user);
   }
 
-  async deleteByUserId(userId: number): Promise<UserEntity> {
-    const user = await this.userRepository.preload({ id: +userId });
+  async deleteUser(id: number): Promise<UserEntity> {
+    const user = await this.userRepository.preload({ id: +id });
     if (!user) {
-      throw new NotFoundException(`user id: ${userId} not found`);
+      throw new NotFoundException(`user id: ${id} not found`);
     }
     return this.userRepository.remove(user);
   }
 
-  // async deleteByUserId(userId: number) {
-  //   const queryRunner = this.connection.createQueryRunner();
+  async listUser() {
+    return this.userRepository.find();
+  }
 
-  //   await queryRunner.connect();
-  //   await queryRunner.startTransaction();
-  //   try {
-  //     const user = await this.getUserById(userId);
-  //     const result = await this.userRepository.remove(user);
-
-  //     await queryRunner.commitTransaction();
-
-  //     return result;
-  //   } catch (err) {
-  //     await queryRunner.rollbackTransaction();
-  //     throw new NotFoundException(`Failed: ${err}`);
-  //   } finally {
-  //     await queryRunner.release();
-  //   }
-  // }
+  async getUser(id: number): Promise<UserEntity> {
+    const user = await this.userRepository.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`user id: ${id} not found`);
+    }
+    return user;
+  }
 }

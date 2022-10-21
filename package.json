@@ -44,8 +44,6 @@
     "class-validator": "^0.13.2",
     "express": "^4.17.3",
     "helmet": "^5.0.2",
-    "joi": "^17.6.0",
-    "nest-winston": "^1.7.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -53,8 +51,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.4",
     "swagger-ui-express": "^4.3.0",
-    "typeorm": "^0.2.44",
-    "winston": "^3.8.2"
+    "typeorm": "^0.2.44"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.7",

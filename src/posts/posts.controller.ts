@@ -19,34 +19,34 @@ export class PostsController {
 
   @Post()
   @ApiOperation({ summary: 'post 생성', description: '' })
-  async create(
+  async createPost(
     @Param('userId') userId: number,
     @Body() createPostDto: CreatePostDto,
   ) {
-    return this.postsService.create(userId, createPostDto);
-  }
-
-  @Get()
-  async findAll(@Param('userId') userId: number) {
-    return this.postsService.findAll(userId);
-  }
-
-  @Get(':id')
-  async find(@Param('userId') userId: number, @Param('id') id: string) {
-    return this.postsService.findOne(userId, +id);
+    return this.postsService.createPost(userId, createPostDto);
   }
 
   @Patch(':id')
-  async update(
+  async updatePost(
     @Param('userId') userId: number,
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
   ) {
-    return this.postsService.update(userId, +id, updatePostDto);
+    return this.postsService.updatePost(userId, +id, updatePostDto);
   }
 
   @Delete(':id')
-  async remove(@Param('userId') userId: number, @Param('id') id: string) {
-    return this.postsService.remove(userId, +id);
+  async deletePost(@Param('userId') userId: number, @Param('id') id: string) {
+    return this.postsService.deletePost(userId, +id);
+  }
+
+  @Get()
+  async listPosts(@Param('userId') userId: number) {
+    return this.postsService.listPosts(userId);
+  }
+
+  @Get(':id')
+  async getPost(@Param('userId') userId: number, @Param('id') id: string) {
+    return this.postsService.getPost(userId, +id);
   }
 }

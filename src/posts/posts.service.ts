@@ -12,7 +12,7 @@ export class PostsService {
     private readonly postRepository: Repository<PostEntity>,
   ) {}
 
-  async create(
+  async createPost(
     userId: number,
     createPostDto: CreatePostDto,
   ): Promise<PostEntity> {
@@ -23,20 +23,7 @@ export class PostsService {
     return this.postRepository.save(post);
   }
 
-  async findAll(userId: number): Promise<PostEntity[]> {
-    return this.postRepository.find({
-      user_id: userId,
-    });
-  }
-
-  async findOne(userId: number, id: number): Promise<PostEntity> {
-    return this.postRepository.findOne({
-      user_id: userId,
-      id: id,
-    });
-  }
-
-  async update(
+  async updatePost(
     userId: number,
     id: number,
     updatePostDto: UpdatePostDto,
@@ -52,7 +39,7 @@ export class PostsService {
     return this.postRepository.save(post);
   }
 
-  async remove(userId: number, id: number): Promise<PostEntity> {
+  async deletePost(userId: number, id: number): Promise<PostEntity> {
     const post = await this.postRepository.preload({
       user_id: userId,
       id: +id,
@@ -61,5 +48,18 @@ export class PostsService {
       throw new NotFoundException(`Post with id: ${id} not found`);
     }
     return this.postRepository.remove(post);
+  }
+
+  async listPosts(userId: number): Promise<PostEntity[]> {
+    return this.postRepository.find({
+      user_id: userId,
+    });
+  }
+
+  async getPost(userId: number, id: number): Promise<PostEntity> {
+    return this.postRepository.findOne({
+      user_id: userId,
+      id: id,
+    });
   }
 }

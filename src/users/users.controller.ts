@@ -30,14 +30,8 @@ export class UsersController {
     summary: '모든 user 정보',
     description: '모든 user 정보 response',
   })
-  async getUsers() {
-    return this.usersService.getUsers();
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'user 정보', description: 'user 정보 response' })
-  async getUser(@Param('id') id: string) {
-    return this.usersService.getUserById(+id);
+  async listUsers() {
+    return this.usersService.listUser();
   }
 
   @Patch(':id')
@@ -50,12 +44,24 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.updateByUserId(+id, updateUserDto);
+    return this.usersService.updateUser(+id, updateUserDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.ACCEPTED)
   async deleteUser(@Param('id') id: string) {
-    return this.usersService.deleteByUserId(+id);
+    return this.usersService.deleteUser(+id);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'user 정보', description: 'user 정보 response' })
+  async getUser(@Param('id') id: string) {
+    return this.usersService.getUser(+id);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'list user', description: 'list user' })
+  async listUser() {
+    return this.usersService.listUser();
   }
 }
