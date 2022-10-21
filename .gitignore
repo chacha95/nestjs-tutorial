@@ -1,6 +1,6 @@
 # compiled output
-/dist
-/node_modules
+dist
+node_modules
 
 # Logs
 logs
@@ -26,10 +26,10 @@ lerna-debug.log*
 
 # if you are NOT using Zero-installs, then:
 # comment the following lines
-!.yarn/cache
+# !.yarn/cache
 
 # and uncomment the following lines
-# .pnp.*
+.pnp.*
 
 # Tests
 /coverage
@@ -56,3 +56,14 @@ lerna-debug.log*
 
 # postgres
 /redis-data
+
+# env
+.env*
+!.env.local*
+!.env.test*
+
+# elasticsearch-vscode (plugin)
+result.json
+
+# jest coverage
+src/coverage/*
