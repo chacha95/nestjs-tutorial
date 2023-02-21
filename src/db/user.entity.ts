@@ -1,11 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
-import { PostEntity } from '../posts/post.entity';
+import { PULID } from '../common/pulid';
+import { PostEntity } from './post.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
-  @PrimaryGeneratedColumn({ name: 'id', type: 'int' })
-  id: number;
+  @PrimaryColumn({ name: 'id', type: 'varchar' })
+  id: string = PULID.generate('us');
 
   @Column({ name: 'first_name', type: 'varchar' })
   first_name: string;

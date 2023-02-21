@@ -29,9 +29,9 @@ export class LoggingInterceptor implements NestInterceptor {
   ): Observable<unknown> {
     return call$.handle().pipe(
       tap({
-        next: (val: unknown): void => {
-          this.logNext(val, context);
-        },
+        // next: (val: unknown): void => {
+        //   this.logNext(val, context);
+        // },
         error: (err: Error): void => {
           this.logError(err, context);
         },

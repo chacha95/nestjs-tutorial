@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { ICreateUserRequest, IUpdateUserRequest } from './interfaces';
 import { UsersService } from './users.service';
 
 @ApiTags('user API')
@@ -23,16 +23,9 @@ export class UsersController {
   @Post()
   @ApiOperation({ summary: 'user 생성', description: 'user 생성' })
   async createUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
-  }
-
-  @Get()
-  @ApiOperation({
-    summary: '모든 user 정보',
-    description: '모든 user 정보 response',
-  })
-  async listUsers() {
-    return this.usersService.listUser();
+    return this.usersService.createUser({
+      ...createUserDto,
+    } as ICreateUserRequest);
   }
 
   @Patch(':id')
@@ -45,19 +38,22 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.updateUser(+id, updateUserDto);
+    return this.usersService.updateUser({
+      id: id,
+      ...updateUserDto,
+    } as IUpdateUserRequest);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.ACCEPTED)
   async deleteUser(@Param('id') id: string) {
-    return this.usersService.deleteUser(+id);
+    return this.usersService.deleteUser(id);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'user 정보', description: 'user 정보 response' })
   async getUser(@Param('id') id: string) {
-    return this.usersService.getUser(+id);
+    return this.usersService.getUser(id);
   }
 
   @Get()

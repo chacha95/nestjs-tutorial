@@ -1,20 +1,15 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 
-import { UserEntity } from '../users/user.entity';
+import { PULID } from '../common/pulid';
+import { UserEntity } from './user.entity';
 
 @Entity({ name: 'posts' })
 export class PostEntity {
-  @PrimaryGeneratedColumn({ name: 'id', type: 'int' })
-  id: number;
+  @PrimaryColumn({ name: 'id', type: 'varchar' })
+  id: string = PULID.generate('po');
 
   @Column({ name: 'user_id', type: 'number', nullable: false })
-  user_id: number;
+  user_id: string;
 
   @Column({ name: 'name', type: 'text', nullable: true })
   name: string;

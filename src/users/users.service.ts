@@ -1,54 +1,30 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from './user.entity';
+import { UserEntity } from '../db/user.entity';
+import { ICreateUserRequest, IUpdateUserRequest } from './interfaces';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  constructor(private readonly userRepository: UsersRepository) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const user = this.userRepository.create(createUserDto);
-    return user;
+  async createUser(createUserRequest: ICreateUserRequest): Promise<UserEntity> {
+    return await this.userRepository.createAndSave(createUserRequest);
   }
 
-  async updateUser(
-    id: number,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UserEntity> {
-    const user = await this.userRepository.preload({
-      id: +id,
-      ...updateUserDto,
-    });
-    if (!user) {
-      throw new NotFoundException(`user id: ${id} not found`);
-    }
-    return this.userRepository.save(user);
+  async updateUser(updateUserRequest: IUpdateUserRequest): Promise<UserEntity> {
+    return await this.userRepository.updateById(updateUserRequest);
   }
 
-  async deleteUser(id: number): Promise<UserEntity> {
-    const user = await this.userRepository.preload({ id: +id });
-    if (!user) {
-      throw new NotFoundException(`user id: ${id} not found`);
-    }
-    return this.userRepository.remove(user);
+  async deleteUser(id: string): Promise<void> {
+    return await this.userRepository.deleteById(id);
   }
 
-  async listUser() {
-    return this.userRepository.find();
+  async getUser(id: string): Promise<UserEntity> {
+    return await this.userRepository.findById(id);
   }
 
-  async getUser(id: number): Promise<UserEntity> {
-    const user = await this.userRepository.findOne(id);
-    if (!user) {
-      throw new NotFoundException(`user id: ${id} not found`);
-    }
-    return user;
+  async listUser(): Promise<UserEntity[]> {
+    return await this.userRepository.paginate();
   }
 }

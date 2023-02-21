@@ -1,66 +1,30 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { PostEntity } from './post.entity';
+import { PostEntity } from '../db';
+import { ICreatePostRequest, IUpdatePostRequest } from './interfaces';
+import { PostsRepository } from './posts.repository';
 
 @Injectable()
 export class PostsService {
-  constructor(
-    @InjectRepository(PostEntity)
-    private readonly postRepository: Repository<PostEntity>,
-  ) {}
+  constructor(private readonly postsRepository: PostsRepository) {}
 
-  async createPost(
-    userId: number,
-    createPostDto: CreatePostDto,
-  ): Promise<PostEntity> {
-    const post = await this.postRepository.create({
-      user_id: userId,
-      ...createPostDto,
-    });
-    return this.postRepository.save(post);
+  async createPost(createPostRequest: ICreatePostRequest): Promise<PostEntity> {
+    return await this.postsRepository.createAndSave(createPostRequest);
   }
 
-  async updatePost(
-    userId: number,
-    id: number,
-    updatePostDto: UpdatePostDto,
-  ): Promise<PostEntity> {
-    const post = await this.postRepository.preload({
-      user_id: userId,
-      id: id,
-      ...updatePostDto,
-    });
-    if (!post) {
-      throw new NotFoundException(`Post with id: ${id} not found`);
-    }
-    return this.postRepository.save(post);
+  async updatePost(updatePostRequest: IUpdatePostRequest): Promise<PostEntity> {
+    return await this.postsRepository.updateById(updatePostRequest);
   }
 
-  async deletePost(userId: number, id: number): Promise<PostEntity> {
-    const post = await this.postRepository.preload({
-      user_id: userId,
-      id: +id,
-    });
-    if (!post) {
-      throw new NotFoundException(`Post with id: ${id} not found`);
-    }
-    return this.postRepository.remove(post);
+  async deletePost(user_id: string, id: string): Promise<void> {
+    return await this.postsRepository.deleteById(user_id, id);
   }
 
-  async listPosts(userId: number): Promise<PostEntity[]> {
-    return this.postRepository.find({
-      user_id: userId,
-    });
+  async getPost(user_id: string, id: string): Promise<PostEntity> {
+    return await this.postsRepository.findById(user_id, id);
   }
 
-  async getPost(userId: number, id: number): Promise<PostEntity> {
-    return this.postRepository.findOne({
-      user_id: userId,
-      id: id,
-    });
+  async listPosts(user_id: string): Promise<PostEntity[]> {
+    return await this.postsRepository.paginate(user_id);
   }
 }

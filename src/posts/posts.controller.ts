@@ -9,45 +9,52 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { CreatePostDto, UpdatePostDto } from './dto';
+import { ICreatePostRequest, IUpdatePostRequest } from './interfaces';
 import { PostsService } from './posts.service';
 
 @ApiTags('post API')
-@Controller('users/:userId')
+@Controller('users/:user_id')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
   @ApiOperation({ summary: 'post 생성', description: '' })
   async createPost(
-    @Param('userId') userId: number,
+    @Param('user_id') user_id: string,
     @Body() createPostDto: CreatePostDto,
   ) {
-    return this.postsService.createPost(userId, createPostDto);
+    return this.postsService.createPost({
+      user_id: user_id,
+      ...createPostDto,
+    } as ICreatePostRequest);
   }
 
   @Patch(':id')
   async updatePost(
-    @Param('userId') userId: number,
+    @Param('user_id') user_id: string,
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
   ) {
-    return this.postsService.updatePost(userId, +id, updatePostDto);
+    return this.postsService.updatePost({
+      user_id: user_id,
+      id: id,
+      ...updatePostDto,
+    } as IUpdatePostRequest);
   }
 
   @Delete(':id')
-  async deletePost(@Param('userId') userId: number, @Param('id') id: string) {
-    return this.postsService.deletePost(userId, +id);
-  }
-
-  @Get()
-  async listPosts(@Param('userId') userId: number) {
-    return this.postsService.listPosts(userId);
+  async deletePost(@Param('user_id') user_id: string, @Param('id') id: string) {
+    return this.postsService.deletePost(user_id, id);
   }
 
   @Get(':id')
-  async getPost(@Param('userId') userId: number, @Param('id') id: string) {
-    return this.postsService.getPost(userId, +id);
+  async getPost(@Param('user_id') user_id: string, @Param('id') id: string) {
+    return this.postsService.getPost(user_id, id);
+  }
+
+  @Get()
+  async listPosts(@Param('user_id') user_id: string) {
+    return this.postsService.listPosts(user_id);
   }
 }
