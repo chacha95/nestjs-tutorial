@@ -1,19 +1,17 @@
 {
   "compilerOptions": {
+    "composite": true,
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
-    "rootDir": "./",
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "outDir": "dist",
     "incremental": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "moduleResolution": "Node"
+    "skipLibCheck": true
   }
 }
