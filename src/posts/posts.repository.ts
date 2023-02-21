@@ -1,10 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { PostEntity } from '../db';
+import { dbExceptionDecorator, PostEntity } from '../db';
 import { ICreatePostRequest, IUpdatePostRequest } from './interfaces';
 
 @EntityRepository(PostEntity)
 export class PostsRepository extends Repository<PostEntity> {
+  @dbExceptionDecorator()
   async createAndSave(
     createPostRequest: ICreatePostRequest,
   ): Promise<PostEntity> {
@@ -12,6 +13,7 @@ export class PostsRepository extends Repository<PostEntity> {
     return await this.save(post);
   }
 
+  @dbExceptionDecorator()
   async updateById(updatePostRequest: IUpdatePostRequest): Promise<PostEntity> {
     const { user_id, id, name } = updatePostRequest;
     const queryBuilder = this.createQueryBuilder()
@@ -34,6 +36,7 @@ export class PostsRepository extends Repository<PostEntity> {
     return post;
   }
 
+  @dbExceptionDecorator()
   async deleteById(user_id: string, id: string): Promise<void> {
     const post = await this.findOneOrFail({
       where: { user_id: user_id, id: id },
@@ -41,6 +44,7 @@ export class PostsRepository extends Repository<PostEntity> {
     await this.remove(post);
   }
 
+  @dbExceptionDecorator()
   async findById(user_id: string, id: string): Promise<PostEntity> {
     const post = await this.findOneOrFail({
       where: { user_id: user_id, id: id },
@@ -48,6 +52,7 @@ export class PostsRepository extends Repository<PostEntity> {
     return post;
   }
 
+  @dbExceptionDecorator()
   async paginate(user_id: string): Promise<PostEntity[]> {
     const posts = await this.find({
       where: { user_id: user_id },

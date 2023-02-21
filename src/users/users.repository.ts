@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { UserEntity } from '../db';
+import { dbExceptionDecorator, UserEntity } from '../db';
 import { ICreateUserRequest, IUpdateUserRequest } from './interfaces';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
-  // @dbExceptionHandler()
+  @dbExceptionDecorator()
   async createAndSave(
     createUserRequest: ICreateUserRequest,
   ): Promise<UserEntity> {
@@ -13,6 +13,7 @@ export class UsersRepository extends Repository<UserEntity> {
     return await this.save(user);
   }
 
+  @dbExceptionDecorator()
   async updateById(updateUserRequest: IUpdateUserRequest): Promise<UserEntity> {
     const { id, first_name, last_name } = updateUserRequest;
     const queryBuilder = this.createQueryBuilder()
@@ -36,6 +37,7 @@ export class UsersRepository extends Repository<UserEntity> {
     return user;
   }
 
+  @dbExceptionDecorator()
   async deleteById(id: string): Promise<void> {
     const user = await this.findOneOrFail({
       where: { id: id },
@@ -43,13 +45,14 @@ export class UsersRepository extends Repository<UserEntity> {
     await this.remove(user);
   }
 
-  // @dbExceptionHandler()
+  @dbExceptionDecorator()
   async findById(id: string): Promise<UserEntity> {
     return await this.findOneOrFail({
       where: { id: id },
     });
   }
 
+  @dbExceptionDecorator()
   async paginate(): Promise<UserEntity[]> {
     return await this.find();
   }
