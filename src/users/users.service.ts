@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getManager, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,14 +15,6 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const user = this.userRepository.create(createUserDto);
-    await getManager()
-      .transaction(async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(user);
-      })
-      .catch((err) => {
-        throw err;
-      });
-
     return user;
   }
 
