@@ -9,8 +9,12 @@ import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import { GrpcClientService } from '../grpc-client/grpc-client.service';
+import { HeroById } from '../grpc-client/interfaces/grpc-client.interface';
+
 @Injectable()
 export class HeroInterceptor implements NestInterceptor {
+  constructor(private readonly grpcClientService: GrpcClientService) {}
   /**
    * Intercept method, logs before and after the request being processed
    * @param context details about the current request
@@ -44,6 +48,7 @@ export class HeroInterceptor implements NestInterceptor {
       const lastUrl = url.split('/').at(-1);
       if (lastUrl == 'users' && method == 'POST')
         console.log(`status code is ${statusCode}`);
+      this.grpcClientService.findOne({ id: 1 } as HeroById);
     }
   }
 }

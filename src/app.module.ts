@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { GrpcClientModule } from './common/grpc-client/grpc-client.module';
 import { HeroInterceptor, LoggingInterceptor } from './common/interceptors';
 import { customValidationPipe } from './common/pipes/validation.pipe';
 import { ConfigModule } from './config/config.module';
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
     }),
     UsersModule,
     PostsModule,
+    GrpcClientModule,
   ],
   controllers: [AppController],
   providers: [
