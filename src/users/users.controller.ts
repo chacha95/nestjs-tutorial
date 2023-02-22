@@ -23,6 +23,7 @@ export class UsersController {
   @Post()
   @ApiOperation({ summary: 'user 생성', description: 'user 생성' })
   async createUser(@Body() createUserDto: CreateUserDto) {
+    console.log(createUserDto);
     return this.usersService.createUser({
       ...createUserDto,
     } as ICreateUserRequest);

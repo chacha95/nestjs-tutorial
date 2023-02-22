@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { LoggingInterceptor } from './common/logging.interceptor';
+import { HeroInterceptor, LoggingInterceptor } from './common/interceptors';
 import { customValidationPipe } from './common/pipes/validation.pipe';
 import { ConfigModule } from './config/config.module';
 import { TypeORMConfigService } from './config/typeorm-config.service';
@@ -46,6 +46,10 @@ import { UsersModule } from './users/users.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HeroInterceptor,
     },
   ],
 })
